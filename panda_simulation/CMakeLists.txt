@@ -7,11 +7,28 @@ project(panda_simulation)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+    interactive_markers
+    moveit_core
+    moveit_ros_planning
+    moveit_ros_planning_interface
+    moveit_ros_perception
+    rviz_visual_tools
+    moveit_visual_tools
+    pluginlib
+    geometric_shapes
+    pcl_ros
+    pcl_conversions
+    rosbag
+    tf2_ros
+    tf2_eigen
+    tf2_geometry_msgs
+)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+find_package(Eigen3 REQUIRED)
+find_package(Boost REQUIRED system filesystem date_time thread)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -99,10 +116,16 @@ find_package(catkin REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES panda_simulation
-#  CATKIN_DEPENDS other_catkin_pkg
-#  DEPENDS system_lib
+  LIBRARIES
+  INCLUDE_DIRS
+  CATKIN_DEPENDS
+    moveit_core
+    moveit_visual_tools
+    moveit_ros_planning_interface
+    interactive_markers
+    tf2_geometry_msgs
+  DEPENDS
+    EIGEN3
 )
 
 ###########
@@ -112,8 +135,8 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-# ${catkin_INCLUDE_DIRS}
+ include
+ ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -130,6 +153,9 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/panda_simulation_node.cpp)
+
+add_executable(move_robot src/moveRobot.cpp)
+target_link_libraries(move_robot ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
