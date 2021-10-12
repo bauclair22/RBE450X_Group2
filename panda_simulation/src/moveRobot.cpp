@@ -14,7 +14,7 @@
 // The circle constant tau = 2*pi. One tau is one rotation in radians.
 const double tau = 2 * M_PI;
 
-int moveToPose(float x, float y, float z, float w){
+int moveToPose(float x, float y, float z, float roll, float pitch, float yaw){
   // BEGIN_TUTORIAL
   //
   // Setup
@@ -84,7 +84,13 @@ int moveToPose(float x, float y, float z, float w){
   // We can plan a motion for this group to a desired pose for the
   // end-effector.
   geometry_msgs::Pose target_pose1;
-  target_pose1.orientation.w = w;
+  tf2::Quaternion q;
+  q.setRPY(roll, pitch, yaw);
+  q = q.normalize();
+  target_pose1.orientation.x = q[0];
+  target_pose1.orientation.y = q[1];
+  target_pose1.orientation.z = q[2];
+  target_pose1.orientation.w = q[3];
   target_pose1.position.x = x;
   target_pose1.position.y = y;
   target_pose1.position.z = z;
@@ -136,7 +142,7 @@ int main(int argc, char** argv)
   // beforehand.
   ros::AsyncSpinner spinner(1);
   spinner.start();
-  moveToPose(0.38, -0.2, 0.5, 1.0);
+  moveToPose(0.7, -0.15, 0.6, 1.5, 0, 0);
   ros::shutdown();
   return 0;
 }
