@@ -156,6 +156,8 @@ include_directories(
 
 add_executable(move_robot src/moveRobot.cpp)
 target_link_libraries(move_robot ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+add_executable(appendPointClouds src/appendPointClouds.cpp)
+target_link_libraries(appendPointClouds ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
